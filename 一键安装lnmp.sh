@@ -1,13 +1,4 @@
 #!/bin/bash
-#
-#********************************************************************
-#Author:        wangxiaochun
-#Date:          2020-01-21
-#FileName：      lnmp.sh
-#URL:           http://www.wangxiacohun.com
-#Description：       LNMP wordpress 博客系统 
-#Copyright (C):     2020 All rights reserved
-#********************************************************************
 SRC_DIR=/usr/local/src
 NGINX='nginx-1.18.0.tar.gz'
 MYSQL='mysql-5.7.33-linux-glibc2.12-x86_64.tar.gz'
@@ -15,8 +6,8 @@ PHP='php-7.4.10.tar.xz'
 APP='wordpress-5.6.2-zh_CN.tar.gz'
 COLOR="echo -e \\033[01;31m"
 END='\033[0m'
-MYSQL_ROOT_PASSWORD=laowang
-MYSQL_WORDPRESS_PASSWORD=laowang
+MYSQL_ROOT_PASSWORD=lidawei@0606
+MYSQL_WORDPRESS_PASSWORD=lidawei@0606
 CPU=`lscpu| awk '/^CPU\(s\):/{print $NF}'`
 
 ${COLOR}'开始安装基于LNMP的wordpress'$END
@@ -84,7 +75,7 @@ install_nginx(){
    ${COLOR}"开始安装NGINX"$END
    id nginx  &> /dev/null || { useradd -s /sbin/nologin -r  nginx; $COLOR"创建nginx用户"$END; }
    $COLOR"安装nginx相关包"$END
-   yum -q -y install gcc pcre-devel openssl-devel zlib-devel perl-ExtUtils-Embed git &> /dev/null
+   yum -q -y install epel-release gcc pcre-devel openssl-devel zlib-devel perl-ExtUtils-Embed git &> /dev/null
    cd $SRC_DIR
    tar xf $NGINX 
 #   git clone https://github.com/openresty/echo-nginx-module.git || { $COLOR"下载NGINX第三方模块失败,退出!"$END;exit; }
@@ -155,12 +146,12 @@ EOF
 }
 install_php (){
     ${COLOR}"开始安装PHP"$END
-    yum -y -q  install gcc make libxml2-devel bzip2-devel libmcrypt-devel libsqlite3x-devel oniguruma-devel &>/dev/null
+    yum -y -q install gcc make libxml2-devel bzip2-devel libmcrypt-devel libsqlite3x-devel oniguruma-devel sqlite-devel  oniguruma-devel>/dev/null
     cd $SRC_DIR
     tar xf $PHP
     PHP_DIR=`echo $PHP| sed -nr 's/^(.*[0-9]).*/\1/p'`
     cd $PHP_DIR
-     ./configure --prefix=/apps/php74 --enable-mysqlnd --with-mysqli=mysqlnd --with-pdo-mysql=mysqlnd --with-openssl    --with-zlib  --with-config-file-path=/etc --with-config-file-scan-dir=/etc/php.d --enable-mbstring --enable-xml --enable-sockets --enable-fpm --enable-maintainer-zts --disable-fileinfo
+    ./configure --prefix=/apps/php74 --enable-mysqlnd --with-mysqli=mysqlnd --with-pdo-mysql=mysqlnd --with-openssl    --with-zlib  --with-config-file-path=/etc --with-config-file-scan-dir=/etc/php.d --enable-mbstring --enable-xml --enable-sockets --enable-fpm --enable-maintainer-zts --disable-fileinfo
     make -j $CPU && make install 
     [ $? -eq 0 ] && $COLOR"PHP编译安装成功"$END ||  { $COLOR"PHP编译安装失败,退出!"$END;exit; }
     cp php.ini-production  /etc/php.ini
