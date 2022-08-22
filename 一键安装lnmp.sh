@@ -185,7 +185,7 @@ install_wordpress(){
     mv wp-config-sample.php wp-config.php
     mysql -uroot -p"$MYSQL_ROOT_PASSWORD" -e "create database wordpress;grant all on wordpress.* to wordpress@'127.0.0.1' identified by '$MYSQL_WORDPRESS_PASSWORD'" &>/dev/null
     sed -i.bak -e 's/database_name_here/wordpress/' -e 's/username_here/wordpress/' -e 's/password_here/'''$MYSQL_WORDPRESS_PASSWORD'''/' -e 's/localhost/127.0.0.1/'  wp-config.php
-    $COLOR"WORDPRESS安装完成"
+    $COLOR"WORDPRESS安装完成"$END
 }
 
 check_file
