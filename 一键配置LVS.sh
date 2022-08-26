@@ -1,6 +1,4 @@
 #!/bin/bash
-#Author:wangxiaochun
-#Date:2017-08-13
 vip=10.0.0.200
 mask='255.255.255.255'
 dev=lo:1
